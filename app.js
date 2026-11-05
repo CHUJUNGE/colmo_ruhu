@@ -133,14 +133,10 @@ const SCENES = [
   ["filter-cleaning", "空调、新风或净化器滤网清洗", 74.8, 79.9, 23.3, 17.5]
 ];
 
-const VISITED_KEY = "colmo-air-visited-scenes-v2";
-const getVisited = () => new Set(JSON.parse(localStorage.getItem(VISITED_KEY) || "[]"));
-const setVisited = (visited) => localStorage.setItem(VISITED_KEY, JSON.stringify([...visited]));
-
 function initHome() {
   const container = document.querySelector("#scene-hotspots");
   if (!container) return;
-  const visited = getVisited();
+  const visited = new Set();
   SCENES.forEach(([id, label, left, top, width, height]) => {
     const card = document.createElement("button");
     card.className = `scene-card${visited.has(id) ? " is-visited" : ""}`;
@@ -151,7 +147,6 @@ function initHome() {
     card.style.cssText = `left:${left}%;top:${top}%;width:${width}%;height:${height}%;`;
     card.addEventListener("click", () => {
       visited.add(id);
-      setVisited(visited);
       card.classList.add("is-visited");
       if (SCENE_TARGETS[id]) window.location.href = `scene.html?scene=${encodeURIComponent(id)}`;
     });
@@ -197,7 +192,7 @@ const SMART_SCENES = [
 function initSmartHome() {
   const container = document.querySelector("#smart-scene-hotspots");
   if (!container) return;
-  const visited = new Set(JSON.parse(localStorage.getItem("colmo-smart-visited-scenes-v2") || "[]"));
+  const visited = new Set();
   SMART_SCENES.forEach(([id, label, left, top, width, height]) => {
     const card = document.createElement("button");
     card.className = `scene-card${visited.has(id) ? " is-visited" : ""}`;
@@ -214,7 +209,6 @@ function initSmartHome() {
     card.style.cssText = `left:${left}%;top:${top}%;width:${width}%;height:${height}%;`;
     card.addEventListener("click", () => {
       visited.add(id);
-      localStorage.setItem("colmo-smart-visited-scenes-v2", JSON.stringify([...visited]));
       card.classList.add("is-visited");
       if (SMART_SCENE_TARGETS[id]) window.location.href = `smart-scene.html?scene=${encodeURIComponent(id)}`;
     });
