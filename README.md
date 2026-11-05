@@ -1,6 +1,6 @@
-# COLMO 空气场景
+# COLMO 家庭场景
 
-纯静态页面，可直接部署到 GitHub Pages。
+纯静态页面，包含空气场景与智能场景两张主页，可直接部署到 GitHub Pages。
 
 ## 本地预览
 
@@ -22,6 +22,8 @@ python3 -m http.server 8000
 ```
 
 用户点击已配置图片的场景后会进入 `scene.html` 显示图片；没有图片的场景只会变色、不跳转。点击左上角“返回空气场景”即可回主页，已经访问的卡片会保留高亮。
+
+智能场景使用 `smart.html`，详情图在 `app.js` 的 `SMART_SCENE_TARGETS` 配置；行为完全相同。
 
 ## GitHub Pages
 
