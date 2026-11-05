@@ -136,7 +136,9 @@ const SCENES = [
 function initHome() {
   const container = document.querySelector("#scene-hotspots");
   if (!container) return;
-  const visited = new Set(JSON.parse(sessionStorage.getItem("air-visited-scenes") || "[]"));
+  const returned = new URLSearchParams(window.location.search).get("visited")?.split(",").filter(Boolean) || [];
+  const visited = new Set([...JSON.parse(sessionStorage.getItem("air-visited-scenes") || "[]"), ...returned]);
+  sessionStorage.setItem("air-visited-scenes", JSON.stringify([...visited]));
   SCENES.forEach(([id, label, left, top, width, height]) => {
     const card = document.createElement("button");
     card.className = `scene-card${visited.has(id) ? " is-visited" : ""}`;
@@ -150,7 +152,7 @@ function initHome() {
       sessionStorage.setItem("air-visited-scenes", JSON.stringify([...visited]));
       card.classList.add("is-visited");
       if (SCENE_TARGETS[id]) {
-        window.location.href = `scene.html?scene=${encodeURIComponent(id)}`;
+        window.location.href = `scene.html?scene=${encodeURIComponent(id)}&visited=${encodeURIComponent([...visited].join(","))}`;
       }
     });
     container.appendChild(card);
@@ -171,7 +173,8 @@ function initDetail() {
     return;
   }
   const image = document.querySelector("#scene-image");
-  document.querySelector(".back-button").href = `index.html?visited=${encodeURIComponent(id)}`;
+  const visited = new URLSearchParams(window.location.search).get("visited") || id;
+  document.querySelector(".back-button").href = `index.html?visited=${encodeURIComponent(visited)}`;
   image.src = target;
   image.alt = `${label}场景详情图`;
   image.hidden = false;
@@ -196,7 +199,9 @@ const SMART_SCENES = [
 function initSmartHome() {
   const container = document.querySelector("#smart-scene-hotspots");
   if (!container) return;
-  const visited = new Set(JSON.parse(sessionStorage.getItem("smart-visited-scenes") || "[]"));
+  const returned = new URLSearchParams(window.location.search).get("visited")?.split(",").filter(Boolean) || [];
+  const visited = new Set([...JSON.parse(sessionStorage.getItem("smart-visited-scenes") || "[]"), ...returned]);
+  sessionStorage.setItem("smart-visited-scenes", JSON.stringify([...visited]));
   SMART_SCENES.forEach(([id, label, left, top, width, height]) => {
     const card = document.createElement("button");
     card.className = `scene-card${visited.has(id) ? " is-visited" : ""}`;
@@ -216,7 +221,7 @@ function initSmartHome() {
       sessionStorage.setItem("smart-visited-scenes", JSON.stringify([...visited]));
       card.classList.add("is-visited");
       if (SMART_SCENE_TARGETS[id]) {
-        window.location.href = `smart-scene.html?scene=${encodeURIComponent(id)}`;
+        window.location.href = `smart-scene.html?scene=${encodeURIComponent(id)}&visited=${encodeURIComponent([...visited].join(","))}`;
       }
     });
     container.appendChild(card);
@@ -230,7 +235,8 @@ function initSmartDetail() {
   const scene = SMART_SCENES.find(([sceneId]) => sceneId === id);
   if (!scene || !SMART_SCENE_TARGETS[id]) { window.location.replace("smart.html"); return; }
   title.textContent = scene[1];
-  document.querySelector(".back-button").href = `smart.html?visited=${encodeURIComponent(id)}`;
+  const visited = new URLSearchParams(window.location.search).get("visited") || id;
+  document.querySelector(".back-button").href = `smart.html?visited=${encodeURIComponent(visited)}`;
   const image = document.querySelector("#smart-scene-image");
   image.src = SMART_SCENE_TARGETS[id];
   image.alt = `${scene[1]}场景详情图`;
