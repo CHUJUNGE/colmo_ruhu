@@ -136,7 +136,8 @@ const SCENES = [
 function initHome() {
   const container = document.querySelector("#scene-hotspots");
   if (!container) return;
-  const visited = new Set();
+  const returnedScene = new URLSearchParams(window.location.search).get("visited");
+  const visited = new Set(returnedScene ? [returnedScene] : []);
   SCENES.forEach(([id, label, left, top, width, height]) => {
     const card = document.createElement("button");
     card.className = `scene-card${visited.has(id) ? " is-visited" : ""}`;
@@ -152,6 +153,7 @@ function initHome() {
     });
     container.appendChild(card);
   });
+  if (returnedScene) history.replaceState({}, "", "index.html");
 }
 
 function initDetail() {
@@ -168,6 +170,7 @@ function initDetail() {
     return;
   }
   const image = document.querySelector("#scene-image");
+  document.querySelector(".back-button").href = `index.html?visited=${encodeURIComponent(id)}`;
   image.src = target;
   image.alt = `${label}场景详情图`;
   image.hidden = false;
@@ -192,7 +195,8 @@ const SMART_SCENES = [
 function initSmartHome() {
   const container = document.querySelector("#smart-scene-hotspots");
   if (!container) return;
-  const visited = new Set();
+  const returnedScene = new URLSearchParams(window.location.search).get("visited");
+  const visited = new Set(returnedScene ? [returnedScene] : []);
   SMART_SCENES.forEach(([id, label, left, top, width, height]) => {
     const card = document.createElement("button");
     card.className = `scene-card${visited.has(id) ? " is-visited" : ""}`;
@@ -214,6 +218,7 @@ function initSmartHome() {
     });
     container.appendChild(card);
   });
+  if (returnedScene) history.replaceState({}, "", "smart.html");
 }
 
 function initSmartDetail() {
@@ -223,6 +228,7 @@ function initSmartDetail() {
   const scene = SMART_SCENES.find(([sceneId]) => sceneId === id);
   if (!scene || !SMART_SCENE_TARGETS[id]) { window.location.replace("smart.html"); return; }
   title.textContent = scene[1];
+  document.querySelector(".back-button").href = `smart.html?visited=${encodeURIComponent(id)}`;
   const image = document.querySelector("#smart-scene-image");
   image.src = SMART_SCENE_TARGETS[id];
   image.alt = `${scene[1]}场景详情图`;
