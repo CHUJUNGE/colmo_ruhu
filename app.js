@@ -149,7 +149,10 @@ function initHome() {
     card.addEventListener("click", () => {
       visited.add(id);
       card.classList.add("is-visited");
-      if (SCENE_TARGETS[id]) window.location.href = `scene.html?scene=${encodeURIComponent(id)}`;
+      if (SCENE_TARGETS[id]) {
+        history.replaceState({}, "", `index.html?visited=${encodeURIComponent(id)}`);
+        window.location.href = `scene.html?scene=${encodeURIComponent(id)}`;
+      }
     });
     container.appendChild(card);
   });
@@ -214,7 +217,10 @@ function initSmartHome() {
     card.addEventListener("click", () => {
       visited.add(id);
       card.classList.add("is-visited");
-      if (SMART_SCENE_TARGETS[id]) window.location.href = `smart-scene.html?scene=${encodeURIComponent(id)}`;
+      if (SMART_SCENE_TARGETS[id]) {
+        history.replaceState({}, "", `smart.html?visited=${encodeURIComponent(id)}`);
+        window.location.href = `smart-scene.html?scene=${encodeURIComponent(id)}`;
+      }
     });
     container.appendChild(card);
   });
