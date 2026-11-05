@@ -136,8 +136,9 @@ const SCENES = [
 function initHome() {
   const container = document.querySelector("#scene-hotspots");
   if (!container) return;
-  const returnedScene = new URLSearchParams(window.location.search).get("visited");
-  const visited = new Set(returnedScene ? [returnedScene] : []);
+  const isReload = performance.getEntriesByType("navigation")[0]?.type === "reload";
+  if (isReload) sessionStorage.removeItem("air-visited-scenes");
+  const visited = new Set(JSON.parse(sessionStorage.getItem("air-visited-scenes") || "[]"));
   SCENES.forEach(([id, label, left, top, width, height]) => {
     const card = document.createElement("button");
     card.className = `scene-card${visited.has(id) ? " is-visited" : ""}`;
@@ -148,15 +149,14 @@ function initHome() {
     card.style.cssText = `left:${left}%;top:${top}%;width:${width}%;height:${height}%;`;
     card.addEventListener("click", () => {
       visited.add(id);
+      sessionStorage.setItem("air-visited-scenes", JSON.stringify([...visited]));
       card.classList.add("is-visited");
       if (SCENE_TARGETS[id]) {
-        history.replaceState({}, "", `index.html?visited=${encodeURIComponent(id)}`);
         window.location.href = `scene.html?scene=${encodeURIComponent(id)}`;
       }
     });
     container.appendChild(card);
   });
-  if (returnedScene) history.replaceState({}, "", "index.html");
 }
 
 function initDetail() {
@@ -198,8 +198,9 @@ const SMART_SCENES = [
 function initSmartHome() {
   const container = document.querySelector("#smart-scene-hotspots");
   if (!container) return;
-  const returnedScene = new URLSearchParams(window.location.search).get("visited");
-  const visited = new Set(returnedScene ? [returnedScene] : []);
+  const isReload = performance.getEntriesByType("navigation")[0]?.type === "reload";
+  if (isReload) sessionStorage.removeItem("smart-visited-scenes");
+  const visited = new Set(JSON.parse(sessionStorage.getItem("smart-visited-scenes") || "[]"));
   SMART_SCENES.forEach(([id, label, left, top, width, height]) => {
     const card = document.createElement("button");
     card.className = `scene-card${visited.has(id) ? " is-visited" : ""}`;
@@ -216,15 +217,14 @@ function initSmartHome() {
     card.style.cssText = `left:${left}%;top:${top}%;width:${width}%;height:${height}%;`;
     card.addEventListener("click", () => {
       visited.add(id);
+      sessionStorage.setItem("smart-visited-scenes", JSON.stringify([...visited]));
       card.classList.add("is-visited");
       if (SMART_SCENE_TARGETS[id]) {
-        history.replaceState({}, "", `smart.html?visited=${encodeURIComponent(id)}`);
         window.location.href = `smart-scene.html?scene=${encodeURIComponent(id)}`;
       }
     });
     container.appendChild(card);
   });
-  if (returnedScene) history.replaceState({}, "", "smart.html");
 }
 
 function initSmartDetail() {
