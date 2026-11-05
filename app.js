@@ -136,8 +136,6 @@ const SCENES = [
 function initHome() {
   const container = document.querySelector("#scene-hotspots");
   if (!container) return;
-  const isReload = performance.getEntriesByType("navigation")[0]?.type === "reload";
-  if (isReload) sessionStorage.removeItem("air-visited-scenes");
   const visited = new Set(JSON.parse(sessionStorage.getItem("air-visited-scenes") || "[]"));
   SCENES.forEach(([id, label, left, top, width, height]) => {
     const card = document.createElement("button");
@@ -198,8 +196,6 @@ const SMART_SCENES = [
 function initSmartHome() {
   const container = document.querySelector("#smart-scene-hotspots");
   if (!container) return;
-  const isReload = performance.getEntriesByType("navigation")[0]?.type === "reload";
-  if (isReload) sessionStorage.removeItem("smart-visited-scenes");
   const visited = new Set(JSON.parse(sessionStorage.getItem("smart-visited-scenes") || "[]"));
   SMART_SCENES.forEach(([id, label, left, top, width, height]) => {
     const card = document.createElement("button");
